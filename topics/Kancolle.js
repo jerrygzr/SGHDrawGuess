@@ -1,4 +1,4 @@
-const topics = [ 
+const topics_Kancolle = [ 
 	'长门',
 	'陆奥',
 	'伊势',
@@ -237,4 +237,4 @@ const topics = [
 	'科罗拉多',
 ];
 
-export default topics;
+export default topics_Kancolle;

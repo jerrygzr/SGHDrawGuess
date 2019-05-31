@@ -1,10 +1,17 @@
 import React from 'react';
 import BoardDrawer from './UI/board-drawer.js';
 import BoardGuesser from './UI/board-guesser.js';
+import BoardTopic from './UI/board-topic.js';
 
 export class DrawGuessBoard extends React.Component {
 
   renderSwitch() {
+	if (this.props.G.topiclist===null) {
+    	    return ( <div>
+			<BoardTopic {...this.props} />
+			</div>
+		);
+	}
 	if (parseInt(this.props.playerID)===this.props.G.currentdrawer) {
      // case '0':
       //  return <BoardDrawer {...this.props} />;

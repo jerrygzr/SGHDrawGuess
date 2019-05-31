@@ -1,13 +1,26 @@
 import { Game, TurnOrder } from 'boardgame.io/core';
-import topics from "./topics/Kancolle.js";
+import topics_Kancolle from "./topics/Kancolle.js";
+import topics_ArkKnights from "./topics/ArkKnights.js";
 
 export const DrawGuess = Game({
 	name: 'DrawGuess' ,
 	minPlayers:2,
 	maxPlayers:8,
-	setup: () => ({player_names:Array(9).fill(null), round:0,pathinks:null,currentdrawer:null,topic: null, startTime:null, winner: null,scores: Array(9).fill(0),guesses: Array(30).fill(null), from:Array(30).fill(null), nguess: 0, attempt: Array(9).fill(0),giveup:0,nextround:0,}),
+	setup: () => ({player_names:Array(9).fill(null), round:0,pathinks:null,currentdrawer:null,topiclist:null, topic: null, startTime:null, winner: null,scores: Array(9).fill(0),guesses: Array(30).fill(null), from:Array(30).fill(null), nguess: 0, attempt: Array(9).fill(0),giveup:0,nextround:0,}),
 
   moves: {
+	  submitTopic(G,ctx,topicName) {
+		  switch (topicName) {
+			  case 'Kancolle' :
+			  	G.topiclist=topics_Kancolle;
+			  	break;
+			  case 'ArkKnights' :
+			  	G.topiclist=topics_ArkKnights;
+			  	break;
+			  default:
+			  	G.topiclist=null;
+		  }
+	  },
 	  submitNames(G,ctx,player_names) {
 		  G.player_names=player_names;
 	  },
@@ -29,9 +42,13 @@ export const DrawGuess = Game({
   },
 
   flow: {
-	  startingPhase: 'play',
+	  startingPhase: 'chooseTopic',
 	  phases: {
-		  endGame: {
+		  chooseTopic: {
+			  allowedMoves : ['submitNames' ,'submitTopic','submitDraw'],
+			  turnOrder: TurnOrder.ANY,			  
+			  endPhaseIf : G => G.topiclist!=null,
+			  next : 'play',
 		  },
 		  endRound: {
 			  allowedMoves : ['submitDraw', 'nextRound'],
@@ -49,7 +66,7 @@ export const DrawGuess = Game({
 				  G.round++;
 				  G.pathinks=null;
 				  G.winner=null;
-				  G.topic=topics[Math.floor(Math.random()*topics.length)];
+				  G.topic=G.topiclist[Math.floor(Math.random()*G.topiclist.length)];
 				  if (G.currentdrawer===null) {
 					 G.currentdrawer=0;
 				  } else {
