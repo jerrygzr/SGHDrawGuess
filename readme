@@ -1,0 +1,5 @@
+SGHDrawGuess
+Abort if you don't know SGH.
+
+The codes requires npm environment.
+Requires boardgame.io package.
